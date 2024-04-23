@@ -29,13 +29,9 @@ jobs:
 
     - name: Download Adobe AIR SDK
       run: |
-        curl -sL https://api.github.com/repos/apache/royale-compiler/releases/latest \
-        | grep "browser_download_url.*bin.*.zip" \
-        | cut -d : -f 2,3 \
-        | tr -d \" \
-        | wget -i -
-        unzip -q royale-sdk-*.zip
-        echo "AIR_HOME=$(pwd)/royale-sdk" >> $GITHUB_ENV
+        curl -LO https://airsdk.harman.com/api/versions/50.2.5.1/sdks/AIRSDK_Linux.zip
+        unzip -q AIRSDK_Linux.zip
+        echo "AIR_HOME=$(pwd)/AIRSDK" >> $GITHUB_ENV
 
     - name: Build ANE
       run: ant -f build/build.xml # Adjust the path to your build.xml file
