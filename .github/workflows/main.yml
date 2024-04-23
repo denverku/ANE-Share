@@ -27,6 +27,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install ant
 
+    - name: Download Adobe AIR SDK
+      run: |
+        curl -LO https://airsdk.harman.com/assets/downloads/AdobeAIRSDK.zip
+        unzip AdobeAIRSDK.zip -d air_sdk
+        echo "AIR_HOME=$(pwd)/air_sdk" >> $GITHUB_ENV
+
     - name: Build ANE
       run: ant -f build/build.xml # Adjust the path to your build.xml file
 
