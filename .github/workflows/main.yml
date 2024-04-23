@@ -22,13 +22,22 @@ jobs:
       with:
         java-version: '11'
 
-    - name: Build ANE
+    - name: Install Apache Ant
       run: |
-        ./gradlew build
-        cp -r ShareANE/build/outputs/ane/ShareANE.ane $GITHUB_WORKSPACE # Adjust the path accordingly
-        
+        sudo apt-get update
+        sudo apt-get install ant
+
+    - name: Build ANE
+      run: ant -f build/build.xml # Adjust the path to your build.xml file
+
+    - name: Find ANE file
+      id: find-ane
+      run: |
+        find . -type f -name '*.ane' -print0 | xargs -0 echo "::set-output name=ane-path::"
+
     - name: Upload ANE artifact
+      if: steps.find-ane.outputs.ane-path != ''
       uses: actions/upload-artifact@v2
       with:
         name: share-ane-artifact
-        path: $GITHUB_WORKSPACE/ShareANE.ane
+        path: ${{ steps.find-ane.outputs.ane-path }}
