@@ -1,0 +1,33 @@
+name: Build ANE
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+
+    - name: Build ANE
+      run: |
+        ./gradlew build
+        cp -r ShareANE/build/outputs/ane/ShareANE.ane $GITHUB_WORKSPACE # Adjust the path accordingly
+        
+    - name: Upload ANE artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: share-ane-artifact
+        path: $GITHUB_WORKSPACE/ShareANE.ane
